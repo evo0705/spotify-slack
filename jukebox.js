@@ -25,7 +25,7 @@ var jukebox = {
 	return data;
   },
 
-  showHelp: function(req, res, spotifyApi){
+  showHelp: function(req, res){
   	var html = "<ul>";
   		html = "<li>/jukebox <strong>help</strong> <i>(See possible commands to be used in jukebox)</i></li>";
   		html = "<li>/jukebox <strong>list</strong> <i>(Get the track lists in jukebox playlist)</li>";
@@ -33,7 +33,7 @@ var jukebox = {
   		html = "<li>/jukebox <strong>remove [track]</strong> <i>(Get the track lists in jukebox playlist)</li>";
   		html = "<li>/jukebox <strong>clear</strong> <i>(Get the track lists in jukebox playlist)</li>";
   		html += "</ul>";
-  	return res.send(html);
+  	res.send(html);
   },
 
   addTrack: function(req, res, spotifyApi){
