@@ -69,7 +69,7 @@ app.post('/store', function(req, res) {
         switch(data.command){
           case "help":
             response = jukebox.showHelp();
-            return res.send(response);
+            return res.send("WELCOME");
           break;
 
           case "add":
@@ -114,7 +114,7 @@ app.post('/test', function(req, res){
       if(data.error){
         switch(data.command){
           case "help":
-            jukebox.showHelp(req, res, spotifyApi);
+            jukebox.showHelp();
           break;
 
           case "add":
