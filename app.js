@@ -7,9 +7,9 @@ var SpotifyWebApi = require('spotify-web-api-node');
 dotenv.load();
 
 var spotifyApi = new SpotifyWebApi({
-  clientId     : process.env.SPOTIFY_KEY,
-  clientSecret : process.env.SPOTIFY_SECRET,
-  redirectUri  : process.env.SPOTIFY_REDIRECT_URI
+  clientId     : "0d1f41d27aa84b1db9c77cd982c4699d",
+  clientSecret : "6b791ffc071149cc9b6eb0ed5b43efa9",
+  redirectUri  : "https://lit-plains-85178.herokuapp.com/callback"
 });
 
 var app = express();
