@@ -62,12 +62,14 @@ app.post('/store', function(req, res) {
         spotifyApi.setRefreshToken(data.body['refresh_token']);
       }
       
-      var data = jukeBox.getCommands(req);
+      var data = jukeBox.getCommands(req),
+          response = "";
       
       if(data.error){
         switch(data.command){
           case "help":
-            jukebox.showHelp(req, res);
+            response = jukebox.showHelp();
+            return res.send(response);
           break;
 
           case "add":

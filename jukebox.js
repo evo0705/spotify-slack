@@ -25,15 +25,15 @@ var jukebox = {
 	return data;
   },
 
-  showHelp: function(req, res){
+  showHelp: function(){
   	var html = "<ul>";
-  		html = "<li>/jukebox <strong>help</strong> <i>(See possible commands to be used in jukebox)</i></li>";
-  		html = "<li>/jukebox <strong>list</strong> <i>(Get the track lists in jukebox playlist)</li>";
-  		html = "<li>/jukebox <strong>add [track]</strong> <i>(Get the track lists in jukebox playlist)</li>";
-  		html = "<li>/jukebox <strong>remove [track]</strong> <i>(Get the track lists in jukebox playlist)</li>";
-  		html = "<li>/jukebox <strong>clear</strong> <i>(Get the track lists in jukebox playlist)</li>";
+  		html += "<li>/jukebox <strong>help</strong> <i>(See possible commands to be used in jukebox)</i></li>";
+  		html += "<li>/jukebox <strong>list</strong> <i>(Get the track lists in jukebox playlist)</li>";
+  		html += "<li>/jukebox <strong>add [track]</strong> <i>(Get the track lists in jukebox playlist)</li>";
+  		html += "<li>/jukebox <strong>remove [track]</strong> <i>(Get the track lists in jukebox playlist)</li>";
+  		html += "<li>/jukebox <strong>clear</strong> <i>(Get the track lists in jukebox playlist)</li>";
   		html += "</ul>";
-  	res.send(html);
+  	return html;
   },
 
   addTrack: function(req, res, spotifyApi){
