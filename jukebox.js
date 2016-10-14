@@ -25,13 +25,13 @@ var jukebox = {
 	return data;
   },
 
-  showHelp: function(){
+  showHelp: function(req, res){
   	var html = "/jukebox *help* _(See possible commands to be used in jukebox)_ \n";
   		html += "/jukebox *list* _(Get the track lists in jukebox playlist)_ \n";
   		html += "/jukebox *add [track]* _(Get the track lists in jukebox playlist)_ \n";
   		html += "/jukebox *remove [track]* _(Get the track lists in jukebox playlist)_ \n";
   		html += "/jukebox *clear* _(Get the track lists in jukebox playlist)_ \n";  		
-  	return html;
+  	return res.send(html);
   },
 
   addTrack: function(req, res, spotifyApi){
@@ -63,7 +63,11 @@ var jukebox = {
   },
 
   listPlaylist: function(req, res, spotifyApi){
-  	
+  	spotifyApi.getPlaylist('ravindranpandu','07jFGdc9tfGpzq91PqdNCh').then(function(data) {
+	    return res.send(data);
+	},function(err) {
+	    console.log('Something went wrong!', err);
+	});
   },
 
   clearPlaylist: function(req, res, spotifyApi){

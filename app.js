@@ -68,29 +68,23 @@ app.post('/store', function(req, res) {
       if(!data.error){
         switch(data.command){
           case "help":
-            // response = jukebox.showHelp();
-            var html = "/jukebox *help* _(See possible commands to be used in jukebox)_ \n";
-                html += "/jukebox *list* _(Get the track lists in jukebox playlist)_ \n";
-                html += "/jukebox *add [track]* _(Get the track lists in jukebox playlist)_ \n";
-                html += "/jukebox *remove [track]* _(Get the track lists in jukebox playlist)_ \n";
-                html += "/jukebox *clear* _(Get the track lists in jukebox playlist)_ \n"; 
-            res.send(html);
+            jukeBox.showHelp(req, res);
           break;
 
           case "add":
-            jukebox.addTrack(req, res, spotifyApi);
+            jukeBox.addTrack(req, res, spotifyApi);
           break;
 
           case "remove":
-            jukebox.removeTrack(req, res, spotifyApi);
+            jukeBox.removeTrack(req, res, spotifyApi);
           break;
 
           case "list":
-            jukebox.listPlaylist(req, res, spotifyApi);
+            jukeBox.listPlaylist(req, res, spotifyApi);
           break;
 
           case "clear":
-            jukebox.clearPlaylist(req, res, spotifyApi);
+            jukeBox.clearPlaylist(req, res, spotifyApi);
           break;
 
           default:
