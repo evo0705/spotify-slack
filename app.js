@@ -74,7 +74,7 @@ app.post('/store', function(req, res) {
                 html += "/jukebox *add [track]* _(Get the track lists in jukebox playlist)_ \n";
                 html += "/jukebox *remove [track]* _(Get the track lists in jukebox playlist)_ \n";
                 html += "/jukebox *clear* _(Get the track lists in jukebox playlist)_ \n"; 
-            return res.send(html);
+            res.send(html);
           break;
 
           case "add":
