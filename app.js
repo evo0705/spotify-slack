@@ -1,14 +1,15 @@
 var express       = require('express');
 var bodyParser    = require('body-parser');
 var request       = require('request');
-var dotenv        = require('dotenv');
+var jukeBox       = require('./jukebox');
 var SpotifyWebApi = require('spotify-web-api-node');
+// var dotenv        = require('dotenv');
 
 var SLACK_TOKEN = "hOrmrTCws4dXwjmypcBP1nav";
 var SPOTIFY_USERNAME = "ravindranpandu";
 var SPOTIFY_PLAYLIST_ID = "07jFGdc9tfGpzq91PqdNCh";
 
-dotenv.load();
+// dotenv.load();
 
 var spotifyApi = new SpotifyWebApi({
   clientId     : "0d1f41d27aa84b1db9c77cd982c4699d",
@@ -61,28 +62,35 @@ app.post('/store', function(req, res) {
       if (data.body['refresh_token']) { 
         spotifyApi.setRefreshToken(data.body['refresh_token']);
       }
-      if(req.body.text.indexOf(' - ') === -1) {
-        var query = 'track:' + req.body.text;
-      } else { 
-        var pieces = req.body.text.split(' - ');
-        var query = 'artist:' + pieces[0].trim() + ' track:' + pieces[1].trim();
+      
+      var data = jukebox.getCommands(req);
+
+      if(data.error){
+        switch(data.command){
+          case "help":
+            jukebox.showHelp(req, res, spotifyApi);
+          break;
+
+          case "add":
+            jukebox.addTrack(req, res, spotifyApi);
+          break;
+
+          case "remove":
+            jukebox.removeTrack(req, res, spotifyApi);
+          break;
+
+          case "list":
+            jukebox.listPlaylist(req, res, spotifyApi);
+          break;
+
+          case "clear":
+            jukebox.clearPlaylist(req, res, spotifyApi);
+          break;
+        }
+      }else{
+        return res.send(data.message);
       }
-      spotifyApi.searchTracks(query)
-        .then(function(data) {
-          var results = data.body.tracks.items;
-          if (results.length === 0) {
-            return res.send('Could not find that track.');
-          }
-          var track = results[0];
-          spotifyApi.addTracksToPlaylist(SPOTIFY_USERNAME, SPOTIFY_PLAYLIST_ID, ['spotify:track:' + track.id])
-            .then(function(data) {
-              return res.send('Track added: *' + track.name + '* by *' + track.artists[0].name + '*');
-            }, function(err) {
-              return res.send(err.message);
-            });
-        }, function(err) {
-          return res.send(err.message);
-        });
+      
     }, function(err) {
       return res.send('Could not refresh access token. You probably need to re-authorise yourself from your app\'s homepage.');
     });
