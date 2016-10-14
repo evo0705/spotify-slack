@@ -65,10 +65,12 @@ var jukebox = {
   listPlaylist: function(req, res, spotifyApi){
   	spotifyApi.getPlaylist('ravindranpandu','07jFGdc9tfGpzq91PqdNCh').then(function(data) {
   		var html = "";
+  		var time = "";
   		var tracks = data.body.tracks.items;
 
   		for(var i = 0; i < tracks.length; i ++){
-  			html += (i+1) + ") *" + tracks[i].track.name + "* _(ID: " + tracks[i].track.id + ")_ \n";
+  			time = millisToMinutesAndSeconds(tracks[i].track.duration_ms);
+  			html += (i+1) + ") *" + tracks[i].track.name + "* _| Id: " + tracks[i].track.id + " | Duration: " + time + "_ \n";
   		}
 
   		if(html == ""){
@@ -86,3 +88,9 @@ var jukebox = {
 };
 
 module.exports = jukebox;
+
+function millisToMinutesAndSeconds(millis) {
+  var minutes = Math.floor(millis / 60000);
+  var seconds = ((millis % 60000) / 1000).toFixed(0);
+  return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
+}
