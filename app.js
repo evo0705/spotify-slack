@@ -63,32 +63,32 @@ app.post('/store', function(req, res) {
       }
       
       var data = jukeBox.getCommands(req);
-      
-      if(data.error){
-        switch(data.command){
-          case "help":
-            jukebox.showHelp(req, res, spotifyApi);
-          break;
+      return res.send(data);
+      // if(data.error){
+      //   switch(data.command){
+      //     case "help":
+      //       jukebox.showHelp(req, res, spotifyApi);
+      //     break;
 
-          case "add":
-            jukebox.addTrack(req, res, spotifyApi);
-          break;
+      //     case "add":
+      //       jukebox.addTrack(req, res, spotifyApi);
+      //     break;
 
-          case "remove":
-            jukebox.removeTrack(req, res, spotifyApi);
-          break;
+      //     case "remove":
+      //       jukebox.removeTrack(req, res, spotifyApi);
+      //     break;
 
-          case "list":
-            jukebox.listPlaylist(req, res, spotifyApi);
-          break;
+      //     case "list":
+      //       jukebox.listPlaylist(req, res, spotifyApi);
+      //     break;
 
-          case "clear":
-            jukebox.clearPlaylist(req, res, spotifyApi);
-          break;
-        }
-      }else{
-        return res.send(data.message);
-      }
+      //     case "clear":
+      //       jukebox.clearPlaylist(req, res, spotifyApi);
+      //     break;
+      //   }
+      // }else{
+      //   return res.send(data.message);
+      // }
       
     }, function(err) {
       return res.send('Could not refresh access token. You probably need to re-authorise yourself from your app\'s homepage.');
