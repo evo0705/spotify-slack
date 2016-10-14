@@ -28,8 +28,8 @@ var jukebox = {
   showHelp: function(req, res){
   	var html = "/jukebox *help* _(See possible commands to be used in jukebox)_ \n";
   		html += "/jukebox *list* _(Get the track lists in jukebox playlist)_ \n";
-  		html += "/jukebox *add [track]* _(Get the track lists in jukebox playlist)_ \n";
-  		html += "/jukebox *remove [track]* _(Get the track lists in jukebox playlist)_ \n";
+  		html += "/jukebox *add [trackID]* _(Get the track lists in jukebox playlist)_ \n";
+  		html += "/jukebox *remove [trackID]* _(Get the track lists in jukebox playlist)_ \n";
   		html += "/jukebox *clear* _(Get the track lists in jukebox playlist)_ \n";  		
   	return res.send(html);
   },
@@ -64,7 +64,17 @@ var jukebox = {
 
   listPlaylist: function(req, res, spotifyApi){
   	spotifyApi.getPlaylist('ravindranpandu','07jFGdc9tfGpzq91PqdNCh').then(function(data) {
-	    return res.send(data);
+  		var html = "";
+  		var tracks = data.body.tracks.items;
+
+  		for(var i = 0; i < tracks.length; i ++){
+  			html += (i+1) + ") *" + tracks[i].track.name + "* _(ID: " + tracks[i].track.id + ")_ \n";
+  		}
+
+  		if(html == ""){
+  			html = "Playlist is empty, try adding tracks using /jukebox add [trackID]";
+  		}
+	    return res.send(html);
 	},function(err) {
 	    console.log('Something went wrong!', err);
 	});
