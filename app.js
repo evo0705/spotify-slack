@@ -65,10 +65,10 @@ app.post('/store', function(req, res) {
       var data = jukeBox.getCommands(req),
           response = "";
       
-      if(data.error){
+      if(!data.error){
         switch(data.command){
           case "help":
-            // response = jukebox.showHelp();
+            response = jukebox.showHelp();
             return res.send("WELCOME");
           break;
 
@@ -90,47 +90,6 @@ app.post('/store', function(req, res) {
 
           default:
             return res.send('Invalid command please use /jukebox help for more info');
-          break;
-        }
-      }else{
-        return res.send(data.message);
-      }
-      
-    }, function(err) {
-      return res.send('Could not refresh access token. You probably need to re-authorise yourself from your app\'s homepage.');
-    });
-});
-
-app.post('/test', function(req, res){
-  spotifyApi.refreshAccessToken()
-    .then(function(data) {
-      spotifyApi.setAccessToken(data.body['access_token']);
-      if (data.body['refresh_token']) { 
-        spotifyApi.setRefreshToken(data.body['refresh_token']);
-      }
-      
-      var data = jukeBox.getCommands(req);
-      
-      if(data.error){
-        switch(data.command){
-          case "help":
-            jukebox.showHelp();
-          break;
-
-          case "add":
-            jukebox.addTrack(req, res, spotifyApi);
-          break;
-
-          case "remove":
-            jukebox.removeTrack(req, res, spotifyApi);
-          break;
-
-          case "list":
-            jukebox.listPlaylist(req, res, spotifyApi);
-          break;
-
-          case "clear":
-            jukebox.clearPlaylist(req, res, spotifyApi);
           break;
         }
       }else{
