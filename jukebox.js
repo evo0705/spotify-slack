@@ -33,7 +33,7 @@ var jukebox = {
   		html += "<li>/jukebox <strong>remove [track]</strong> <i>(Get the track lists in jukebox playlist)</li>";
   		html += "<li>/jukebox <strong>clear</strong> <i>(Get the track lists in jukebox playlist)</li>";
   		html += "</ul>";
-  	return html;
+  	return "HELP WORKED";
   },
 
   addTrack: function(req, res, spotifyApi){
