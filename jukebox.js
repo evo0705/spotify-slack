@@ -1,4 +1,4 @@
-module.exports = {
+var jukebox = {
   getCommands: function(req){
   	var content = req.body.text.split(" "),
 		command = "",
@@ -72,3 +72,5 @@ module.exports = {
   	
   }
 };
+
+module.exports = jukebox;

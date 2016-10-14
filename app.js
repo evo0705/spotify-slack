@@ -4,7 +4,6 @@ var request       = require('request');
 var jukeBox       = require('./jukebox');
 var SpotifyWebApi = require('spotify-web-api-node');
 // var dotenv        = require('dotenv');
-
 var SLACK_TOKEN = "hOrmrTCws4dXwjmypcBP1nav";
 var SPOTIFY_USERNAME = "ravindranpandu";
 var SPOTIFY_PLAYLIST_ID = "07jFGdc9tfGpzq91PqdNCh";
@@ -63,33 +62,74 @@ app.post('/store', function(req, res) {
         spotifyApi.setRefreshToken(data.body['refresh_token']);
       }
       
-      var data = jukebox.getCommands(req);
-      return res.send('Hi Success');
-      // if(data.error){
-      //   switch(data.command){
-      //     case "help":
-      //       jukebox.showHelp(req, res, spotifyApi);
-      //     break;
+      var data = jukeBox.getCommands(req);
+      
+      if(data.error){
+        switch(data.command){
+          case "help":
+            jukebox.showHelp(req, res, spotifyApi);
+          break;
 
-      //     case "add":
-      //       jukebox.addTrack(req, res, spotifyApi);
-      //     break;
+          case "add":
+            jukebox.addTrack(req, res, spotifyApi);
+          break;
 
-      //     case "remove":
-      //       jukebox.removeTrack(req, res, spotifyApi);
-      //     break;
+          case "remove":
+            jukebox.removeTrack(req, res, spotifyApi);
+          break;
 
-      //     case "list":
-      //       jukebox.listPlaylist(req, res, spotifyApi);
-      //     break;
+          case "list":
+            jukebox.listPlaylist(req, res, spotifyApi);
+          break;
 
-      //     case "clear":
-      //       jukebox.clearPlaylist(req, res, spotifyApi);
-      //     break;
-      //   }
-      // }else{
-      //   return res.send(data.message);
-      // }
+          case "clear":
+            jukebox.clearPlaylist(req, res, spotifyApi);
+          break;
+        }
+      }else{
+        return res.send(data.message);
+      }
+      
+    }, function(err) {
+      return res.send('Could not refresh access token. You probably need to re-authorise yourself from your app\'s homepage.');
+    });
+});
+
+app.post('/test', function(req, res){
+  spotifyApi.refreshAccessToken()
+    .then(function(data) {
+      spotifyApi.setAccessToken(data.body['access_token']);
+      if (data.body['refresh_token']) { 
+        spotifyApi.setRefreshToken(data.body['refresh_token']);
+      }
+      
+      var data = jukeBox.getCommands(req);
+      
+      if(data.error){
+        switch(data.command){
+          case "help":
+            jukebox.showHelp(req, res, spotifyApi);
+          break;
+
+          case "add":
+            jukebox.addTrack(req, res, spotifyApi);
+          break;
+
+          case "remove":
+            jukebox.removeTrack(req, res, spotifyApi);
+          break;
+
+          case "list":
+            jukebox.listPlaylist(req, res, spotifyApi);
+          break;
+
+          case "clear":
+            jukebox.clearPlaylist(req, res, spotifyApi);
+          break;
+        }
+      }else{
+        return res.send(data.message);
+      }
       
     }, function(err) {
       return res.send('Could not refresh access token. You probably need to re-authorise yourself from your app\'s homepage.');
