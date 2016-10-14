@@ -68,8 +68,13 @@ app.post('/store', function(req, res) {
       if(!data.error){
         switch(data.command){
           case "help":
-            response = jukebox.showHelp();
-            return res.send(response);
+            // response = jukebox.showHelp();
+            var html = "/jukebox *help* _(See possible commands to be used in jukebox)_ \n";
+                html += "/jukebox *list* _(Get the track lists in jukebox playlist)_ \n";
+                html += "/jukebox *add [track]* _(Get the track lists in jukebox playlist)_ \n";
+                html += "/jukebox *remove [track]* _(Get the track lists in jukebox playlist)_ \n";
+                html += "/jukebox *clear* _(Get the track lists in jukebox playlist)_ \n"; 
+            return res.send(html);
           break;
 
           case "add":
