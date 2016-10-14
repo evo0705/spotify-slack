@@ -4,6 +4,10 @@ var request       = require('request');
 var dotenv        = require('dotenv');
 var SpotifyWebApi = require('spotify-web-api-node');
 
+var SLACK_TOKEN = "hOrmrTCws4dXwjmypcBP1nav";
+var SPOTIFY_USERNAME = "ravindranpandu";
+var SPOTIFY_PLAYLIST_ID = "07jFGdc9tfGpzq91PqdNCh";
+
 dotenv.load();
 
 var spotifyApi = new SpotifyWebApi({
@@ -44,7 +48,7 @@ app.get('/callback', function(req, res) {
 });
 
 app.use('/store', function(req, res, next) {
-  if (req.body.token !== process.env.SLACK_TOKEN) {
+  if (req.body.token !== SLACK_TOKEN) {
     return res.status(500).send('Cross site request forgerizzle!');
   }
   next();
@@ -70,7 +74,7 @@ app.post('/store', function(req, res) {
             return res.send('Could not find that track.');
           }
           var track = results[0];
-          spotifyApi.addTracksToPlaylist(process.env.SPOTIFY_USERNAME, process.env.SPOTIFY_PLAYLIST_ID, ['spotify:track:' + track.id])
+          spotifyApi.addTracksToPlaylist(SPOTIFY_USERNAME, SPOTIFY_PLAYLIST_ID, ['spotify:track:' + track.id])
             .then(function(data) {
               return res.send('Track added: *' + track.name + '* by *' + track.artists[0].name + '*');
             }, function(err) {
