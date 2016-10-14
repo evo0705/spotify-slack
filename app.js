@@ -68,8 +68,8 @@ app.post('/store', function(req, res) {
       if(!data.error){
         switch(data.command){
           case "help":
-            // response = jukebox.showHelp();
-            return res.send("<ul><li>Welocme</li><li>Welcome 2</li></ul>");
+            response = jukebox.showHelp();
+            return res.send(response);
           break;
 
           case "add":

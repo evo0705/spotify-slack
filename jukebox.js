@@ -26,14 +26,12 @@ var jukebox = {
   },
 
   showHelp: function(){
-  	var html = "<ul>";
-  		html += "<li>/jukebox <strong>help</strong> <i>(See possible commands to be used in jukebox)</i></li>";
-  		html += "<li>/jukebox <strong>list</strong> <i>(Get the track lists in jukebox playlist)</li>";
-  		html += "<li>/jukebox <strong>add [track]</strong> <i>(Get the track lists in jukebox playlist)</li>";
-  		html += "<li>/jukebox <strong>remove [track]</strong> <i>(Get the track lists in jukebox playlist)</li>";
-  		html += "<li>/jukebox <strong>clear</strong> <i>(Get the track lists in jukebox playlist)</li>";
-  		html += "</ul>";
-  	return "HELP WORKED";
+  	var html = "/jukebox *help* _(See possible commands to be used in jukebox)_ \n";
+  		html += "/jukebox *list* _(Get the track lists in jukebox playlist)_ \n";
+  		html += "/jukebox *add [track]* _(Get the track lists in jukebox playlist)_ \n";
+  		html += "/jukebox *remove [track]* _(Get the track lists in jukebox playlist)_ \n";
+  		html += "/jukebox *clear* _(Get the track lists in jukebox playlist)_ \n";  		
+  	return html;
   },
 
   addTrack: function(req, res, spotifyApi){
