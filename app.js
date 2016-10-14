@@ -72,7 +72,9 @@ app.post('/store', function(req, res) {
           break;
 
           case "add":
-            jukeBox.addTrack(req, res, spotifyApi);
+            data.username = SPOTIFY_USERNAME;
+            data.playlistId = SPOTIFY_PLAYLIST_ID;
+            jukeBox.addTrack(data, res, spotifyApi);
           break;
 
           case "remove":
