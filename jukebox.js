@@ -63,19 +63,19 @@ var jukebox = {
   	request(url, function (error, response, body) {  		
 	  if (!error && response.statusCode == 200) {	    
 	  	var result = JSON.parse(body);	  		  	
-	  	var time = millisToMinutesAndSeconds(result.duration_ms); 
-	    var html = "--------------NEW TRACK ADDED TO JUKEBOX-------------\n"; 
-	      	
-	    html += "*Song     :*	" + result.name + "\n";
-	    html += "*Album    :*	" + result.album.name + "\n";
-	    html += "*Track ID :*	" + result.id + "\n";
-	    html += "*Duration :*	" + time + "\n";	    
-	    html += "*Preview  :*	<" + result.preview_url + "|Preview>\n";
-	    html += "*Added By :*	" + data.name;
 	    
 	    spotifyApi.addTracksToPlaylist(data.username, data.playlistId, [result.uri])
 	    .then(function(res) {
-		    res.send(html);
+	    	var time = millisToMinutesAndSeconds(result.duration_ms);
+	    	var html = "--------------NEW TRACK ADDED TO JUKEBOX-------------\n";	      	
+		    html += "*Song*\t\t\t: " + result.name + "\n";
+		    html += "*Album*\t\t: " + result.album.name + "\n";
+		    html += "*Track ID*\t: " + result.id + "\n";
+		    html += "*Duration*\t: " + time + "\n";	    
+		    html += "*Preview*\t: <" + result.preview_url + "|Preview>\n";
+		    html += "*Added By*\t: " + data.name;
+
+		    return res.send(html);
 	    }, function(err) {
 	      return res.send(err.message);
 	    }); 
