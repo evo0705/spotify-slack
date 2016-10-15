@@ -38,6 +38,7 @@ var jukebox = {
   searchTracks: function(data, res, spotifyApi){
   	spotifyApi.searchTracks(data.track)
   	 	.then(function(data) {
+  	 		return res.send(data);
   	 		var html = "";
   			var time = "";
 	    	var tracks = data.body.tracks.items;
@@ -48,8 +49,7 @@ var jukebox = {
 
 	  		if(html == ""){
 	  			html = "No results found, try searching with some other query";
-	  		}
-		    return res.send(tracks);
+	  		}		    
 	  	}, function(err) {
 	    	return res.send(err);
 	  	});
