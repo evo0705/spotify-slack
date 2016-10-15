@@ -38,7 +38,7 @@ var jukebox = {
   searchTracks: function(data, res, spotifyApi){
   	spotifyApi.searchTracks(data.track)
   	 	.then(function(data) {  	 		
-  	 		var html = "-----------*SEARCH RESULTS*--------";
+  	 		var html = "-----------*SEARCH RESULTS*--------\n";
   			var time = "";
 	    	var tracks = data.body.tracks.items;
 	    	
@@ -71,19 +71,19 @@ var jukebox = {
 
   listPlaylist: function(req, res, spotifyApi){
   	spotifyApi.getPlaylist('ravindranpandu','07jFGdc9tfGpzq91PqdNCh').then(function(data) {
-  		var html = "-----------*JUKEBOX PLAYLIST*--------";
+  		var html = "-----------*JUKEBOX PLAYLIST*--------\n@ravindranpandu";
   		var time = "";
   		var tracks = data.body.tracks.items;
 
-  		for(var i = 0; i < tracks.length; i ++){
-  			time = millisToMinutesAndSeconds(tracks[i].track.duration_ms);
-  			html += (i+1) + ") *" + tracks[i].track.name + " => " + tracks[i].album.name + "* _[" + tracks[i].track.id + "]_ `" + time + "` \n";
-  		}
+  		// for(var i = 0; i < tracks.length; i ++){
+  		// 	time = millisToMinutesAndSeconds(tracks[i].track.duration_ms);
+  		// 	html += (i+1) + ") *" + tracks[i].track.name + " => " + tracks[i].album.name + "* _[" + tracks[i].track.id + "]_ `" + time + "` \n";
+  		// }
 
-  		if(html == ""){
-  			html = "Playlist is empty, try adding tracks using /jukebox add [trackID]";
-  		}
-	    return res.send(html);
+  		// if(html == ""){
+  		// 	html = "Playlist is empty, try adding tracks using /jukebox add [trackID]";
+  		// }
+	    return res.send(tracks);
 	},function(err) {
 	    console.log('Something went wrong!', err);
 	});
