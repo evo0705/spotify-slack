@@ -16,7 +16,8 @@ var jukebox = {
 		}
 	}else{
 		command = content[0];
-		track = content[1];
+		content.shift();
+		track = content.join(" ");
 
 		data.error = false;	
 		data.command = command;
@@ -37,7 +38,18 @@ var jukebox = {
   searchTracks: function(data, res, spotifyApi){
   	spotifyApi.searchTracks(data.track)
   	 	.then(function(data) {
-	    	res.send(data.body);
+  	 		var html = "";
+  			var time = "";
+	    	var tracks = data.body.tracks.items;
+	  		for(var i = 0; i < tracks.length; i ++){
+	  			time = millisToMinutesAndSeconds(tracks[i].track.duration_ms);
+	  			html += (i+1) + ") *" + tracks[i].track.name + "* _(Id: " + tracks[i].track.id + ")_ `" + time + "` \n";
+	  		}
+
+	  		if(html == ""){
+	  			html = "No results found, try searching with some other query";
+	  		}
+		    return res.send(html);
 	  	}, function(err) {
 	    	res.send(err);
 	  	});
@@ -64,7 +76,7 @@ var jukebox = {
 
   		for(var i = 0; i < tracks.length; i ++){
   			time = millisToMinutesAndSeconds(tracks[i].track.duration_ms);
-  			html += (i+1) + ") *" + tracks[i].track.name + "* _| Id: " + tracks[i].track.id + " | Duration: " + time + "_ \n";
+  			html += (i+1) + ") *" + tracks[i].track.name + "* _(Id: " + tracks[i].track.id + ") `" + time + "` \n";
   		}
 
   		if(html == ""){
