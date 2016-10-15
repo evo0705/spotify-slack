@@ -38,13 +38,13 @@ var jukebox = {
   searchTracks: function(data, res, spotifyApi){
   	spotifyApi.searchTracks(data.track)
   	 	.then(function(data) {  	 		
-  	 		var html = "";
+  	 		var html = "-----------*SEARCH RESULTS*--------";
   			var time = "";
 	    	var tracks = data.body.tracks.items;
 	    	
 	  		for(var i = 0; i < tracks.length; i ++){
 	  			time = millisToMinutesAndSeconds(tracks[i].duration_ms);
-	  			html += (i+1) + ") *" + tracks[i].name + "* _(Id: " + tracks[i].id + ")_ `" + time + "` \n";
+	  			html += (i+1) + ") *" + tracks[i].name + " => " + tracks[i].album.name + "* _[" + tracks[i].id + "]_ `" + time + "` \n";
 	  		}
 
 	  		if(html == ""){
@@ -71,13 +71,13 @@ var jukebox = {
 
   listPlaylist: function(req, res, spotifyApi){
   	spotifyApi.getPlaylist('ravindranpandu','07jFGdc9tfGpzq91PqdNCh').then(function(data) {
-  		var html = "";
+  		var html = "-----------*JUKEBOX PLAYLIST*--------";
   		var time = "";
   		var tracks = data.body.tracks.items;
 
   		for(var i = 0; i < tracks.length; i ++){
   			time = millisToMinutesAndSeconds(tracks[i].track.duration_ms);
-  			html += (i+1) + ") *" + tracks[i].track.name + "* _(Id: " + tracks[i].track.id + ") `" + time + "` \n";
+  			html += (i+1) + ") *" + tracks[i].track.name + " => " + tracks[i].album.name + "* _[" + tracks[i].track.id + "]_ `" + time + "` \n";
   		}
 
   		if(html == ""){
