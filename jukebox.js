@@ -72,13 +72,13 @@ var jukebox = {
 	    html += "*Duration :*	" + time + "\n";	    
 	    html += "*Preview  :*	<" + result.preview_url + "|Preview>\n";
 	    html += "*Added By :*	" + data.name;
-	    res.send(html);
-	    // spotifyApi.addTracksToPlaylist(data.username, data.playlistId, ["spotify:track:" + data.track])
-	    // .then(function(res) {
-		   //  res.send(html);
-	    // }, function(err) {
-	    //   return res.send(err.message);
-	    // }); 
+	    
+	    spotifyApi.addTracksToPlaylist(data.username, data.playlistId, [result.uri])
+	    .then(function(res) {
+		    res.send(html);
+	    }, function(err) {
+	      return res.send(err.message);
+	    }); 
 	  }
 	});	  		   
   },
