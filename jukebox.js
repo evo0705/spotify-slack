@@ -49,9 +49,9 @@ var jukebox = {
 	  		if(html == ""){
 	  			html = "No results found, try searching with some other query";
 	  		}
-		    return res.send(html);
+		    return res.send(tracks);
 	  	}, function(err) {
-	    	res.send(err);
+	    	return res.send(err);
 	  	});
   }, 
 
