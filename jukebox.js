@@ -74,17 +74,7 @@ var jukebox = {
 	    html += "*Added By* : " + data.name;	    
 
 	    spotifyApi.addTracksToPlaylist(data.username, data.playlistId, [result.uri])
-	    .then(function(response) {
-	    	var formData = {
-	    		text: "New Song is added to the Jukebox playlist",
-	    		attachments: [{
-	    			text: html
-	    		}]
-	    	};
-
-	    	request.post({url:SLACK_WEBHOOK_URL, formData: formData}, function optionalCallback(err, httpResponse, body) {			  
-			  console.log('Upload successful!  Server responded with:', body);
-			});
+	    .then(function(response) {	    	
 	    	return res.send(html);
 	    }, function(err) {
 	      return res.send(err.message);
