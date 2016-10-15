@@ -37,19 +37,20 @@ var jukebox = {
   
   searchTracks: function(data, res, spotifyApi){
   	spotifyApi.searchTracks(data.track)
-  	 	.then(function(data) {
-  	 		return res.send(data);
+  	 	.then(function(data) {  	 		
   	 		var html = "";
   			var time = "";
 	    	var tracks = data.body.tracks.items;
+	    	
 	  		for(var i = 0; i < tracks.length; i ++){
-	  			time = millisToMinutesAndSeconds(tracks[i].track.duration_ms);
-	  			html += (i+1) + ") *" + tracks[i].track.name + "* _(Id: " + tracks[i].track.id + ")_ `" + time + "` \n";
+	  			time = millisToMinutesAndSeconds(tracks[i].duration_ms);
+	  			html += (i+1) + ") *" + tracks[i].name + "* _(Id: " + tracks[i].id + ")_ `" + time + "` \n";
 	  		}
 
 	  		if(html == ""){
 	  			html = "No results found, try searching with some other query";
-	  		}		    
+	  		}
+	  		return res.send(html);		    
 	  	}, function(err) {
 	    	return res.send(err);
 	  	});
