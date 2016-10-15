@@ -1,3 +1,5 @@
+var request = require("request");
+
 var jukebox = {
   getCommands: function(req){
   	var content = req.body.text.split(" "),
@@ -44,7 +46,7 @@ var jukebox = {
 	    	
 	  		for(var i = 0; i < tracks.length; i ++){
 	  			time = millisToMinutesAndSeconds(tracks[i].duration_ms);
-	  			html += (i+1) + ") *" + tracks[i].name + " => " + tracks[i].album.name + "* _[" + tracks[i].id + "]_ `" + time + "` <" + tracks[i].preview_url + "|PREVIEW>\n";
+	  			html += (i+1) + ") *" + tracks[i].name + " => " + tracks[i].album.name + "* _[" + tracks[i].id + "]_ `" + time + "` <" + tracks[i].preview_url + "|Preview>\n";
 	  		}
 
 	  		if(html == ""){
@@ -56,13 +58,20 @@ var jukebox = {
 	  	});
   }, 
 
-  addTrack: function(data, res, spotifyApi){  	  	
-	spotifyApi.addTracksToPlaylist(data.username, data.playlistId, [data.track])
-	    .then(function(data) {
-	      return res.send(data);
-	    }, function(err) {
-	      return res.send(err.message);
-	    });    
+  addTrack: function(data, res, spotifyApi){  
+  	var url = "https://api.spotify.com/v1/tracks/" + data.track;
+  	request(url, function (error, response, body) {
+	  if (!error && response.statusCode == 200) {
+	    res.send(body);
+
+	    // spotifyApi.addTracksToPlaylist(data.username, data.playlistId, [data.track])
+	    // .then(function(data) {
+	    //   return res.send(data);
+	    // }, function(err) {
+	    //   return res.send(err.message);
+	    // }); 
+	  }
+	});	  		   
   },
 
   removeTrack: function(req, res, spotifyApi){
@@ -77,20 +86,20 @@ var jukebox = {
 
   		for(var i = 0; i < tracks.length; i ++){
   			time = millisToMinutesAndSeconds(tracks[i].track.duration_ms);
-  			html += (i+1) + ") *" + tracks[i].track.name + " => " + tracks[i].track.album.name + "* _[" + tracks[i].track.id + "]_ `" + time + "` <" + tracks[i].track.preview_url + "|PREVIEW>\n";
+  			html += (i+1) + ") *" + tracks[i].track.name + " => " + tracks[i].track.album.name + "* _[" + tracks[i].track.id + "]_ `" + time + "` <" + tracks[i].track.preview_url + "|Preview>\n";
   		}
 
   		if(html == ""){
   			html = "Playlist is empty, try adding tracks using /jukebox add [trackID]";
   		}
-	    return res.send(tracks);
+	    return res.send(html);
 	},function(err) {
 	    console.log('Something went wrong!', err);
 	});
   },
 
   clearPlaylist: function(req, res, spotifyApi){
-  	res.send("<@ravindranpandu>");
+  	
   }
 };
 
