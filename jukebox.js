@@ -61,16 +61,16 @@ var jukebox = {
   addTrack: function(data, res, spotifyApi){  
   	var url = "https://api.spotify.com/v1/tracks/" + data.track;  	
   	request(url, function (error, response, body) {
-	  if (!error && response.statusCode == 200) {
-	    res.send(body);	   
+	  if (!error && response.statusCode == 200) {	     
+	  	var time = millisToMinutesAndSeconds(body[i].duration_ms); 
 	    var html = "--------------NEW TRACK ADDED TO JUKEBOX-------------\n"; 
-	    html += "*Song     :*" + tracks[i].name + "\n";
-	    html += "*Album    :*" + tracks[i].album.name + "\n";
-	    html += "*Track ID :" + tracks[i].id + "\n";
+	    html += "*Song     :*" + body[i].name + "\n";
+	    html += "*Album    :*" + body[i].album.name + "\n";
+	    html += "*Track ID :" + body[i].id + "\n";
 	    html += "*Duration :*" + time + "\n";
 	    html += "*Added By :*" + data.name + "\n";
-	    html += "*Preview  :*<" + tracks[i].preview_url + "|Preview>";
-
+	    html += "*Preview  :*<" + body[i].preview_url + "|Preview>";
+	    res.send(html);	 
 	    // spotifyApi.addTracksToPlaylist(data.username, data.playlistId, [data.track])
 	    // .then(function(res) {
 	    //   return res.send(res);
