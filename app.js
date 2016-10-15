@@ -110,5 +110,11 @@ app.post('/store', function(req, res) {
     });
 });
 
+app.post('/test', function(req, res){
+  var data = jukeBox.getCommands(req);  
+  data.name = "Ravin";   
+  jukeBox.addTrack(data, res, spotifyApi);
+});
+
 app.set('port', (process.env.PORT || 5000));
 app.listen(app.get('port'));

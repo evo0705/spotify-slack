@@ -60,23 +60,26 @@ var jukebox = {
 
   addTrack: function(data, res, spotifyApi){  
   	var url = "https://api.spotify.com/v1/tracks/" + data.track;  	
-  	request(url, function (error, response, body) {
-	  if (!error && response.statusCode == 200) {	     
-	  	var time = millisToMinutesAndSeconds(body[i].duration_ms); 
-	    var html = "--------------NEW TRACK ADDED TO JUKEBOX-------------\n"; 
-	    html += "*Song     :*" + body[i].name + "\n";
-	    html += "*Album    :*" + body[i].album.name + "\n";
-	    html += "*Track ID :" + body[i].id + "\n";
-	    html += "*Duration :*" + time + "\n";
-	    html += "*Added By :*" + data.name + "\n";
-	    html += "*Preview  :*<" + body[i].preview_url + "|Preview>";
-	    res.send(html);	 
-	    // spotifyApi.addTracksToPlaylist(data.username, data.playlistId, [data.track])
-	    // .then(function(res) {
-	    //   return res.send(res);
-	    // }, function(err) {
-	    //   return res.send(err.message);
-	    // }); 
+  	request(url, function (error, response, body) {  		
+	  if (!error && response.statusCode == 200) {	    
+	  	var result = JSON.parse(body);	  		  	
+	  	var time = millisToMinutesAndSeconds(result.duration_ms); 
+	    
+	    spotifyApi.addTracksToPlaylist(data.username, data.playlistId, [data.track])
+	    .then(function(res) {
+	      	var html = "--------------NEW TRACK ADDED TO JUKEBOX-------------\n"; 
+	      	
+		    html += "*Song     :*	" + result.name + "\n";
+		    html += "*Album    :*	" + result.album.name + "\n";
+		    html += "*Track ID :*	" + result.id + "\n";
+		    html += "*Duration :*	" + time + "\n";	    
+		    html += "*Preview  :*	<" + result.preview_url + "|Preview>\n";
+		    html += "*Added By :*	" + data.name;
+
+		    res.send(html);
+	    }, function(err) {
+	      return res.send(err.message);
+	    }); 
 	  }
 	});	  		   
   },
