@@ -34,13 +34,18 @@ var jukebox = {
   	return res.send(html);
   },
 
-  addTrack: function(data, res, spotifyApi){  	
-	spotifyApi.addTracksToPlaylist(data.username, data.playlistId, [data.track])
-	    .then(function(data) {
-	      return res.send(data);
-	    }, function(err) {
-	      return res.send(err.message);
-	    });    
+  addTrack: function(data, res, spotifyApi){  
+	  spotifyApi.searchTracks(data.track).then(function(data) {
+	    res.send(data.body);
+	  }, function(err) {
+	    res.send('Something went wrong!', err);
+	  });	  	
+	// spotifyApi.addTracksToPlaylist(data.username, data.playlistId, [data.track])
+	//     .then(function(data) {
+	//       return res.send(data);
+	//     }, function(err) {
+	//       return res.send(err.message);
+	//     });    
   },
 
   removeTrack: function(req, res, spotifyApi){
