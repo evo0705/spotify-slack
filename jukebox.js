@@ -59,14 +59,21 @@ var jukebox = {
   }, 
 
   addTrack: function(data, res, spotifyApi){  
-  	var url = "https://api.spotify.com/v1/tracks/" + data.track;
+  	var url = "https://api.spotify.com/v1/tracks/" + data.track;  	
   	request(url, function (error, response, body) {
 	  if (!error && response.statusCode == 200) {
-	    res.send(body);
+	    res.send(body);	   
+	    var html = "--------------NEW TRACK ADDED TO JUKEBOX-------------\n"; 
+	    html += "*Song     :*" + tracks[i].name + "\n";
+	    html += "*Album    :*" + tracks[i].album.name + "\n";
+	    html += "*Track ID :" + tracks[i].id + "\n";
+	    html += "*Duration :*" + time + "\n";
+	    html += "*Added By :*" + data.name + "\n";
+	    html += "*Preview  :*<" + tracks[i].preview_url + "|Preview>";
 
 	    // spotifyApi.addTracksToPlaylist(data.username, data.playlistId, [data.track])
-	    // .then(function(data) {
-	    //   return res.send(data);
+	    // .then(function(res) {
+	    //   return res.send(res);
 	    // }, function(err) {
 	    //   return res.send(err.message);
 	    // }); 
