@@ -2,6 +2,7 @@ var express       = require('express');
 var bodyParser    = require('body-parser');
 var request       = require('request');
 var jukeBox       = require('./jukebox');
+// var db            = require('./db');
 var SpotifyWebApi = require('spotify-web-api-node');
 // var dotenv        = require('dotenv');
 var SLACK_TOKEN = "hOrmrTCws4dXwjmypcBP1nav";
@@ -21,6 +22,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
 }));
+
+// db.init();
 
 app.get('/', function(req, res) {
   if (spotifyApi.getAccessToken()) {
@@ -72,6 +75,7 @@ app.post('/store', function(req, res) {
           break;
 
           case "add":
+            data.name = req.body.user_name;
             data.username = SPOTIFY_USERNAME;
             data.playlistId = SPOTIFY_PLAYLIST_ID;
             jukeBox.addTrack(data, res, spotifyApi);
