@@ -74,8 +74,12 @@ app.post('/store', function(req, res) {
             jukeBox.showHelp(req, res);
           break;
 
+          case "search":
+            jukeBox.searchTracks(data, res, spotifyApi);
+          break;
+
           case "add":
-            data.name = req.body.user_name;
+            data.name = req.body.user_name; 
             data.username = SPOTIFY_USERNAME;
             data.playlistId = SPOTIFY_PLAYLIST_ID;
             jukeBox.addTrack(data, res, spotifyApi);
