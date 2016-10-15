@@ -44,7 +44,7 @@ var jukebox = {
 	    	
 	  		for(var i = 0; i < tracks.length; i ++){
 	  			time = millisToMinutesAndSeconds(tracks[i].duration_ms);
-	  			html += (i+1) + ") *" + tracks[i].name + " => " + tracks[i].album.name + "* _[" + tracks[i].id + "]_ `" + time + "` \n";
+	  			html += (i+1) + ") *" + tracks[i].name + " => " + tracks[i].album.name + "* _[" + tracks[i].id + "]_ `" + time + "` <" + tracks[i].preview_url + "|PREVIEW>\n";
 	  		}
 
 	  		if(html == ""){
@@ -71,18 +71,18 @@ var jukebox = {
 
   listPlaylist: function(req, res, spotifyApi){
   	spotifyApi.getPlaylist('ravindranpandu','07jFGdc9tfGpzq91PqdNCh').then(function(data) {
-  		var html = "-----------*JUKEBOX PLAYLIST*--------\n@ravindranpandu";
+  		var html = "-----------*JUKEBOX PLAYLIST*--------\n";
   		var time = "";
   		var tracks = data.body.tracks.items;
 
-  		// for(var i = 0; i < tracks.length; i ++){
-  		// 	time = millisToMinutesAndSeconds(tracks[i].track.duration_ms);
-  		// 	html += (i+1) + ") *" + tracks[i].track.name + " => " + tracks[i].album.name + "* _[" + tracks[i].track.id + "]_ `" + time + "` \n";
-  		// }
+  		for(var i = 0; i < tracks.length; i ++){
+  			time = millisToMinutesAndSeconds(tracks[i].track.duration_ms);
+  			html += (i+1) + ") *" + tracks[i].track.name + " => " + tracks[i].track.album.name + "* _[" + tracks[i].track.id + "]_ `" + time + "` <" + tracks[i].track.preview_url + "|PREVIEW>\n";
+  		}
 
-  		// if(html == ""){
-  		// 	html = "Playlist is empty, try adding tracks using /jukebox add [trackID]";
-  		// }
+  		if(html == ""){
+  			html = "Playlist is empty, try adding tracks using /jukebox add [trackID]";
+  		}
 	    return res.send(tracks);
 	},function(err) {
 	    console.log('Something went wrong!', err);
@@ -90,7 +90,7 @@ var jukebox = {
   },
 
   clearPlaylist: function(req, res, spotifyApi){
-  	
+  	res.send("<@ravindranpandu>");
   }
 };
 
