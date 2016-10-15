@@ -1,4 +1,6 @@
 var request = require("request");
+var MY_SLACK_WEBHOOK_URL = 'https://hooks.slack.com/services/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';
+var slack = require('slack-notify')(MY_SLACK_WEBHOOK_URL);
 
 var jukebox = {
   getCommands: function(req){
@@ -74,6 +76,17 @@ var jukebox = {
 
 	    spotifyApi.addTracksToPlaylist(data.username, data.playlistId, [result.uri])
 	    .then(function(response) {
+	    	slack.alert({
+	    		text: 'New Song added to the Jukebox playlist',
+	    		fields: {
+				    'Song': result.name,
+				    'Album': result.album.name,
+				    'Track ID': result.id,
+				    'Duration': time,
+				    'Preview': result.preview_url,
+				    'Added By': data.name 
+				}
+	    	});
 	    	return res.send(html);
 	    }, function(err) {
 	      return res.send(err.message);
