@@ -78,10 +78,12 @@ var jukebox = {
 		    html += "*Added By* : " + data.name;	    
 
 		    spotifyApi.addTracksToPlaylist(user.username, user.playlist, [result.uri])
-		    .then(function(response) {	    	
+		    .then(function(response) {	
+		    	var songName = result.name.replace(/[^a-zA-Z0-9]/g, ' ');    	
+		    	var albumName = result.album.name.replace(/[^a-zA-Z0-9]/g, ' ');    	
 		    	var options = {
 				  uri: SLACK_WEBHOOK_URL,
-				  form: '{"text": "<http://void(0)|@' + data.name + '> requested `' + result.name + '` from `' + result.album.name + '`"}'
+				  form: '{"text": "<http://void(0)|@' + data.name + '> requested `' + songName + '` from `' + albumName + '`"}'
 				};
 			  	request.post(options, function (error, response, body) {  		  		
 			  		if (!error && response.statusCode == 200) {
@@ -161,7 +163,7 @@ var jukebox = {
   },
 
   notify: function(res){  	  	
-  	var name="ravin",song="one love",album="Blue";  	
+  	var name="ravin",song="(one love)",album="Blue";  	
   	var options = {
 	  uri: SLACK_WEBHOOK_URL,
 	  form: '{"text": "<http://void(0)|@' + name + '> requested `' + song + '` from `' + album + '`"}'
