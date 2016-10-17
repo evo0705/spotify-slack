@@ -2,7 +2,7 @@ var request = require("request");
 var db 		= require('node-localdb');
 var user 	= db('db.json');
 var Promise = require('promise');
-var SLACK_WEBHOOK_URL = 'https://hooks.slack.com/services/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';
+var SLACK_WEBHOOK_URL = 'https://hooks.slack.com/services/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';
 
 var jukebox = {
   getCommands: function(req){
