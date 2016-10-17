@@ -19,6 +19,7 @@
     "dotenv": "~1.0.0",
     "express": "~4.12.3",
     "fs": "0.0.1-security",
+    "node-localdb": "0.0.3",
     "request": "~2.53.0",
     "spotify-web-api-node": "~2.2.0"
   },

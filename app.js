@@ -2,14 +2,10 @@ var express       = require('express');
 var bodyParser    = require('body-parser');
 var request       = require('request');
 var jukeBox       = require('./jukebox');
-// var db            = require('./db');
 var SpotifyWebApi = require('spotify-web-api-node');
-// var dotenv        = require('dotenv');
-var SLACK_TOKEN = "hOrmrTCws4dXwjmypcBP1nav";
-var SPOTIFY_USERNAME = "ravindranpandu";
-var SPOTIFY_PLAYLIST_ID = "07jFGdc9tfGpzq91PqdNCh";
+var SPOTIFY       = jukeBox.getUser();
+var SLACK_TOKEN   = "hOrmrTCws4dXwjmypcBP1nav";
 
-// dotenv.load();
 
 var spotifyApi = new SpotifyWebApi({
   clientId     : "0d1f41d27aa84b1db9c77cd982c4699d",
@@ -80,8 +76,8 @@ app.post('/store', function(req, res) {
 
           case "add":
             data.name = req.body.user_name; 
-            data.username = SPOTIFY_USERNAME;
-            data.playlistId = SPOTIFY_PLAYLIST_ID;
+            data.username = SPOTIFY.username;
+            data.playlistId = SPOTIFY.playlist;
             jukeBox.addTrack(data, res, spotifyApi);
           break;
 
@@ -90,11 +86,17 @@ app.post('/store', function(req, res) {
           break;
 
           case "list":
+            req.username = SPOTIFY.username;
+            req.playlist = SPOTIFY.playlist;
             jukeBox.listPlaylist(req, res, spotifyApi);
           break;
 
           case "clear":
             jukeBox.clearPlaylist(req, res, spotifyApi);
+          break;
+
+          case "setUser":            
+            jukeBox.setUser(data, res);
           break;
 
           default:
@@ -110,10 +112,17 @@ app.post('/store', function(req, res) {
     });
 });
 
-app.post('/test', function(req, res){
-  var data = jukeBox.getCommands(req);  
-  data.name = "Ravin";   
-  jukeBox.addTrack(data, res, spotifyApi);
+app.get('/notify', function(req, res){
+  jukeBox.notify(res);
+});
+
+app.post('/setuser', function(req, res){
+  var data = jukeBox.getCommands(req);
+  if(data.command == 'setUser'){
+    jukeBox.setUser(data, res);    
+  }else if(data.command == 'getUser'){
+    jukeBox.getUser(data, res);    
+  }
 });
 
 app.set('port', (process.env.PORT || 5000));

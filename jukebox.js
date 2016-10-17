@@ -1,4 +1,6 @@
 var request = require("request");
+var db = require('node-localdb');
+var user = db('db.json');
 var SLACK_WEBHOOK_URL = 'https://hooks.slack.com/services/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';
 
 var jukebox = {
@@ -74,8 +76,14 @@ var jukebox = {
 	    html += "*Added By* : " + data.name;	    
 
 	    spotifyApi.addTracksToPlaylist(data.username, data.playlistId, [result.uri])
-	    .then(function(response) {	    	
-	    	return res.send(html);
+	    .then(function(response) {	    		    	
+	    	var formData = "{\"text\": \"\<http://void(0)|@" + data.name + "> requested *" + result.name + "* from *" + result.album.name + "*\"}";
+		  	request.post({url: SLACK_WEBHOOK_URL, formData: formData}, function (error, response, body) {    		
+		  		if (!error && response.statusCode == 200) {
+		  			return res.send(html);
+		  		}
+		  		return res.send(error);
+		  	});
 	    }, function(err) {
 	      return res.send(err.message);
 	    }); 
@@ -84,11 +92,11 @@ var jukebox = {
   },
 
   removeTrack: function(req, res, spotifyApi){
-  	
+  	res.send("Opps!, you don't have access to command *REMOVE*");
   },
 
   listPlaylist: function(req, res, spotifyApi){
-  	spotifyApi.getPlaylist('ravindranpandu','07jFGdc9tfGpzq91PqdNCh').then(function(data) {
+  	spotifyApi.getPlaylist(req.username, req.playlist).then(function(data) {
   		var html = "-----------*JUKEBOX PLAYLIST*--------\n";
   		var time = "";
   		var tracks = data.body.tracks.items;
@@ -108,7 +116,40 @@ var jukebox = {
   },
 
   clearPlaylist: function(req, res, spotifyApi){
-  	
+  	res.send("Opps!, you don't have access to command *CLEAR*");
+  },
+
+  setUser: function(data, res){  	
+  	var result = data.track.split(" ");
+
+  	if(result.length === 2){ 
+  		user.remove({type: 'user'}).then(function(deletedUser){
+		    if(deletedUser.length > 0){
+		    	user.insert({type: 'user',username: result[0], playlist: result[1]}).then(function(u){		    
+				    return res.send("User changed successfully as *" + result[0] + "* and playlist *" + result[1] + "*");		    
+				});	
+		    }
+		}); 	
+  	}else{
+  		return res.send("Bad way to setUser, follow the command /jukebox *setUser* _username_ _playlist_");
+  		
+  	}  	
+  },
+
+  getUser: function(data, res){
+  	user.findOne({type: 'user'}).then(function(user){
+	    return {username: user.username, playlist: user.playlist};	    
+	});
+  },
+
+  notify: function(res){
+  	var formData = "{\"text\": \"\<http://void(0)|@Ravin> requested *One Love* from *Blue*\"}";
+  	request.post({url: SLACK_WEBHOOK_URL, formData: formData}, function (error, response, body) {    		
+  		if (!error && response.statusCode == 200) {
+  			return res.send(body);
+  		}
+  		return res.send(error);
+  	});
   }
 };
 
