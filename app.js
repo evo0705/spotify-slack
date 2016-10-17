@@ -3,9 +3,7 @@ var bodyParser    = require('body-parser');
 var request       = require('request');
 var jukeBox       = require('./jukebox');
 var SpotifyWebApi = require('spotify-web-api-node');
-var SPOTIFY       = jukeBox.getUser();
 var SLACK_TOKEN   = "hOrmrTCws4dXwjmypcBP1nav";
-
 
 var spotifyApi = new SpotifyWebApi({
   clientId     : "0d1f41d27aa84b1db9c77cd982c4699d",
@@ -75,9 +73,7 @@ app.post('/store', function(req, res) {
           break;
 
           case "add":
-            data.name = req.body.user_name; 
-            data.username = SPOTIFY.username;
-            data.playlistId = SPOTIFY.playlist;
+            data.name = req.body.user_name;             
             jukeBox.addTrack(data, res, spotifyApi);
           break;
 
@@ -85,9 +81,7 @@ app.post('/store', function(req, res) {
             jukeBox.removeTrack(req, res, spotifyApi);
           break;
 
-          case "list":
-            req.username = SPOTIFY.username;
-            req.playlist = SPOTIFY.playlist;
+          case "list":            
             jukeBox.listPlaylist(req, res, spotifyApi);
           break;
 
@@ -121,7 +115,7 @@ app.post('/setuser', function(req, res){
   if(data.command == 'setUser'){
     jukeBox.setUser(data, res);    
   }else if(data.command == 'getUser'){
-    jukeBox.getUser(data, res);    
+    jukeBox.getUser();    
   }
 });
 

@@ -1,6 +1,7 @@
 var request = require("request");
-var db = require('node-localdb');
-var user = db('db.json');
+var db 		= require('node-localdb');
+var user 	= db('db.json');
+var Promise = require('promise');
 var SLACK_WEBHOOK_URL = 'https://hooks.slack.com/services/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';
 
 var jukebox = {
@@ -61,37 +62,41 @@ var jukebox = {
 	  	});
   }, 
 
-  addTrack: function(data, res, spotifyApi){  
-  	var url = "https://api.spotify.com/v1/tracks/" + data.track;  	
-  	request(url, function (error, response, body) {  		
-	  if (!error && response.statusCode == 200) {	    
-	  	var result = JSON.parse(body);	  		  	
-	    var time = millisToMinutesAndSeconds(result.duration_ms);
-    	var html = "--------------NEW TRACK ADDED TO JUKEBOX-------------\n";	      	
-	    html += "*Song* : " + result.name + "\n";
-	    html += "*Album* : " + result.album.name + "\n";
-	    html += "*Track ID* : " + result.id + "\n";
-	    html += "*Duration* : " + time + "\n";	    
-	    html += "*Preview* : <" + result.preview_url + "|Preview>\n";
-	    html += "*Added By* : " + data.name;	    
+  addTrack: function(data, res, spotifyApi){ 
+  	this.getUser().then(function(user){ 
+	  	var url = "https://api.spotify.com/v1/tracks/" + data.track;  	
+	  	request(url, function (error, response, body) {  		
+		  if (!error && response.statusCode == 200) {	    
+		  	var result = JSON.parse(body);	  		  	
+		    var time = millisToMinutesAndSeconds(result.duration_ms);
+	    	var html = "--------------NEW TRACK ADDED TO JUKEBOX-------------\n";	      	
+		    html += "*Song* : " + result.name + "\n";
+		    html += "*Album* : " + result.album.name + "\n";
+		    html += "*Track ID* : " + result.id + "\n";
+		    html += "*Duration* : " + time + "\n";	    
+		    html += "*Preview* : <" + result.preview_url + "|Preview>\n";
+		    html += "*Added By* : " + data.name;	    
 
-	    spotifyApi.addTracksToPlaylist(data.username, data.playlistId, [result.uri])
-	    .then(function(response) {	    	
-	    	var options = {
-			  uri: SLACK_WEBHOOK_URL,
-			  form: '{"text": "<http://void(0)|@' + data.name + '> requested `' + result.name + '` from `' + result.album.name + '`"}'
-			};
-		  	request.post(options, function (error, response, body) {  		  		
-		  		if (!error && response.statusCode == 200) {
-		  			return res.send(html);	    		    	
-		  		}
-		  		return res.send(error);
-		  	});
-	    }, function(err) {
-	      return res.send(err.message);
-	    }); 
-	  }
-	});	  		   
+		    spotifyApi.addTracksToPlaylist(user.username, user.playlistId, [result.uri])
+		    .then(function(response) {	    	
+		    	var options = {
+				  uri: SLACK_WEBHOOK_URL,
+				  form: '{"text": "<http://void(0)|@' + data.name + '> requested `' + result.name + '` from `' + result.album.name + '`"}'
+				};
+			  	request.post(options, function (error, response, body) {  		  		
+			  		if (!error && response.statusCode == 200) {
+			  			return res.send(html);	    		    	
+			  		}
+			  		return res.send(error);
+			  	});
+		    }, function(err) {
+		      return res.send(err.message);
+		    }); 
+		  }
+		});	  	
+	}, function(error){
+
+	});   
   },
 
   removeTrack: function(req, res, spotifyApi){
@@ -99,23 +104,27 @@ var jukebox = {
   },
 
   listPlaylist: function(req, res, spotifyApi){
-  	spotifyApi.getPlaylist(req.username, req.playlist).then(function(data) {
-  		var html = "-----------*JUKEBOX PLAYLIST*--------\n";
-  		var time = "";
-  		var tracks = data.body.tracks.items;
+  	this.getUser().then(function(user){
+  		spotifyApi.getPlaylist(user.username, user.playlist).then(function(data) {
+	  		var html = "-----------*JUKEBOX PLAYLIST*--------\n";
+	  		var time = "";
+	  		var tracks = data.body.tracks.items;
 
-  		for(var i = 0; i < tracks.length; i ++){
-  			time = millisToMinutesAndSeconds(tracks[i].track.duration_ms);
-  			html += (i+1) + ") *" + tracks[i].track.name + " => " + tracks[i].track.album.name + "* _[" + tracks[i].track.id + "]_ `" + time + "` <" + tracks[i].track.preview_url + "|Preview>\n";
-  		}
+	  		for(var i = 0; i < tracks.length; i ++){
+	  			time = millisToMinutesAndSeconds(tracks[i].track.duration_ms);
+	  			html += (i+1) + ") *" + tracks[i].track.name + " => " + tracks[i].track.album.name + "* _[" + tracks[i].track.id + "]_ `" + time + "` <" + tracks[i].track.preview_url + "|Preview>\n";
+	  		}
 
-  		if(html == ""){
-  			html = "Playlist is empty, try adding tracks using /jukebox add [trackID]";
-  		}
-	    return res.send(html);
-	},function(err) {
-	    console.log('Something went wrong!', err);
-	});
+	  		if(html == ""){
+	  			html = "Playlist is empty, try adding tracks using /jukebox add [trackID]";
+	  		}
+		    return res.send(html);
+		},function(err) {
+			return res.send('Something went wrong!');		    
+		});
+  	}, function(error){
+  		return res.send('Something went wrong!');  		
+  	});  	
   },
 
   clearPlaylist: function(req, res, spotifyApi){
@@ -139,14 +148,20 @@ var jukebox = {
   	}  	
   },
 
-  getUser: function(data, res){
-  	user.findOne({type: 'user'}).then(function(user){
-	    return {username: user.username, playlist: user.playlist};	    
-	});
+  getUser: function(){  
+  	return new Promise(function (resolve, reject) {
+  		user.findOne({type: 'user'}).then(function(user){  	
+  			if(user){
+  				resolve(user);
+  			}else{
+  				reject({});
+  			}			    
+		});
+  	});	  	
   },
 
-  notify: function(res){  	
-  var name="ravin",song="one love",album="Blue";  	
+  notify: function(res){  	  	
+  	var name="ravin",song="one love",album="Blue";  	
   	var options = {
 	  uri: SLACK_WEBHOOK_URL,
 	  form: '{"text": "<http://void(0)|@' + name + '> requested `' + song + '` from `' + album + '`"}'
