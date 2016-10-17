@@ -76,11 +76,14 @@ var jukebox = {
 	    html += "*Added By* : " + data.name;	    
 
 	    spotifyApi.addTracksToPlaylist(data.username, data.playlistId, [result.uri])
-	    .then(function(response) {	    		    	
-	    	var formData = "{\"text\": \"\<http://void(0)|@" + data.name + "> requested *" + result.name + "* from *" + result.album.name + "*\"}";
-		  	request.post({url: SLACK_WEBHOOK_URL, formData: formData}, function (error, response, body) {    		
+	    .then(function(response) {	    	
+	    	var options = {
+			  uri: SLACK_WEBHOOK_URL,
+			  form: '{"text": "<http://void(0)|@' + data.name + '> requested `' + result.name + '` from `' + result.album.name + '`"}'
+			};
+		  	request.post(options, function (error, response, body) {  		  		
 		  		if (!error && response.statusCode == 200) {
-		  			return res.send(html);
+		  			return res.send(html);	    		    	
 		  		}
 		  		return res.send(error);
 		  	});
@@ -142,9 +145,15 @@ var jukebox = {
 	});
   },
 
-  notify: function(res){
-  	var formData = "{\"text\": \"\<http://void(0)|@Ravin> requested *One Love* from *Blue*\"}";
-  	request.post({url: SLACK_WEBHOOK_URL, formData: formData}, function (error, response, body) {    		
+  notify: function(res){  	
+  var name="ravin",song="one love",album="Blue";  	
+  	var options = {
+	  uri: SLACK_WEBHOOK_URL,
+	  form: '{"text": "<http://void(0)|@' + name + '> requested `' + song + '` from `' + album + '`"}'
+	};
+  	request.post(options, function (error, response, body) {  
+  		console.log(error);
+  		console.log(body);
   		if (!error && response.statusCode == 200) {
   			return res.send(body);
   		}
