@@ -77,7 +77,7 @@ var jukebox = {
 		    html += "*Preview* : <" + result.preview_url + "|Preview>\n";
 		    html += "*Added By* : " + data.name;	    
 
-		    spotifyApi.addTracksToPlaylist(user.username, user.playlistId, [result.uri])
+		    spotifyApi.addTracksToPlaylist(user.username, user.playlist, [result.uri])
 		    .then(function(response) {	    	
 		    	var options = {
 				  uri: SLACK_WEBHOOK_URL,
