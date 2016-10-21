@@ -19,7 +19,11 @@ app.use(bodyParser.urlencoded({
 
 // db.init();
 
-app.get('/', function(req, res) {
+app.get('/', function(req, res) {  
+  return res.send('index.html');
+});
+
+app.get('/login', function(req, res) {
   if (spotifyApi.getAccessToken()) {
     return res.send('You are logged in.');
   }
