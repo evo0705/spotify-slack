@@ -20,7 +20,7 @@ app.use(bodyParser.urlencoded({
 // db.init();
 
 app.get('/', function(req, res) {  
-  return res.send('index.html');
+  return res.sendFile('index.html');
 });
 
 app.get('/login', function(req, res) {
