@@ -3,6 +3,7 @@ var bodyParser    = require('body-parser');
 var request       = require('request');
 var jukeBox       = require('./jukebox');
 var SpotifyWebApi = require('spotify-web-api-node');
+var path          = require('path');
 var SLACK_TOKEN   = "hOrmrTCws4dXwjmypcBP1nav";
 
 var spotifyApi = new SpotifyWebApi({
@@ -20,7 +21,7 @@ app.use(bodyParser.urlencoded({
 // db.init();
 
 app.get('/', function(req, res) {  
-  return res.sendFile('index.html');
+  return res.sendFile(__dirname + '/index.html');
 });
 
 app.get('/login', function(req, res) {

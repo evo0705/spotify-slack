@@ -2,8 +2,66 @@
 <html>
 <head>
 	<title>Spotify Slack</title>
+	<style>
+		html,body{
+			line-height: 30px;
+			background-color: #eee;
+			font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+		}
+		.container{			
+			border-radius: 5px;
+			padding: 15px;
+			margin: auto;
+			width: 50%;
+			border: 1px solid #ccc;
+			background-color: #fff;
+		}
+		h3{
+			margin-bottom: 0px;			
+		}
+		code{
+			background-color: #eee;
+			border: 1px solid #ccc;
+			color: #ff0000;
+			padding: 2px 4px;
+			border-radius: 3px;
+		}
+	</style>
 </head>
 <body>
-<h1>Spotify Slack Bot</h1>
+<div class="container">
+	<h1>Spotify Slack Bot (Jukebox)</h1>
+	<h3>Jukebox commands</h3>
+	<code>/jukebox help</code> <br />
+	<code>/jukebox list</code> <br />
+	<code>/jukebox search</code> <br />
+	<code>/jukebox add</code> <br />
+
+	<h3>/jukebox help</h3>
+	<p>
+		To get the list of commands possible with jukebox
+	</p>
+	<h3>/jukebox list</h3>
+	<p>
+		Show the spotify playlist queue
+	</p>
+	<h3>/jukebox search</h3>
+	<p>
+		You can search for songs inside slack using the <code>/jukebox search</code> command<br /> 
+
+		<b>Example</b><br /> 
+		<code>/jukebox search track:One love</code> (search for a track)<br /> 
+		<code>/jukebox search album:Blue</code> (search for a album)<br />
+		<code>/jukebox search artist:back street boys</code> (search for a artist)<br />
+		<code>/jukebox search track:One love album:Blue artist:back street boys</code> (search for a track with album and artist)
+	</p>
+	<h3>/jukebox add</h3>
+	<p>
+		This command can add tracks to the playlist
+		<code>/jukebox add 6WLS56xiRrXjSm9RSdL3zD</code> <br />
+		Note that <code>6WLS56xiRrXjSm9RSdL3zD</code> is a spotify track id, you can get it when you search for a track using the <code>/juke search</code> comamnd <br />
+		You can also use the track number in the spotify embed URI <code>spotify:track:2bJvI42r8EF3wxjOuDav4r</code>
+	</p>
+</div>
 </body>
 </html>
