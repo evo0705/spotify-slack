@@ -36,8 +36,8 @@ var jukebox = {
   	var html = "/jukebox *help* _(See possible commands to be used in jukebox)_ \n";
   		html += "/jukebox *list* _(Get the track lists in jukebox playlist)_ \n";
   		html += "/jukebox *add [trackID]* _(Get the track lists in jukebox playlist)_ \n";
-  		html += "/jukebox *remove [trackID]* _(Get the track lists in jukebox playlist)_ \n";
-  		html += "/jukebox *clear* _(Get the track lists in jukebox playlist)_ \n";  		
+  		// html += "/jukebox *remove [trackID]* _(Get the track lists in jukebox playlist)_ \n";
+  		// html += "/jukebox *clear* _(Get the track lists in jukebox playlist)_ \n";  		
   	return res.send(html);
   },
   
